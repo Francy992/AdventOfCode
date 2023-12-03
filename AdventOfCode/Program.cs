@@ -2,6 +2,7 @@
 
 using AdventOfCode.Days._1;
 using AdventOfCode.Days._2;
+using AdventOfCode.Days._3;
 
 Console.WriteLine("First day of Advent of Code 2023!");
 var firstDay = new DayOne();
@@ -15,4 +16,10 @@ Console.WriteLine($"Result of day two for small input: {secondDay.ResolvePartOne
 Console.WriteLine($"Result of day two for long input: {secondDay.ResolvePartOneLongInput()}");
 Console.WriteLine($"Result of day two for small input part 2: {secondDay.ResolvePartTwoSmallInput()}");
 Console.WriteLine($"Result of day two for long input part 2: {secondDay.ResolvePartTwoLongInput()}");
+
+var thirdDay = new DayThree();
+Console.WriteLine($"Result of day three for small input: {thirdDay.ResolvePartOneSmallInput()}");
+Console.WriteLine($"Result of day three for long input: {thirdDay.ResolvePartOneLongInput()}");
+Console.WriteLine($"Result of day three for small input part 2: {thirdDay.ResolvePartTwoSmallInput()}");
+Console.WriteLine($"Result of day three for long input part 2: {thirdDay.ResolvePartTwoLongInput()}");
 
