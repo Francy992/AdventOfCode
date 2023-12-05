@@ -5,8 +5,6 @@ namespace AdventOfCode.Days._4;
 
 public class DayFour
 {
-    private readonly Dictionary<string, List<int>> _default = new();
-
     public int ResolvePartOneSmallInput()
     {
         // read file row by row and create a list of string
