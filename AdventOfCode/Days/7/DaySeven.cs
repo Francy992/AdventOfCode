@@ -39,7 +39,7 @@ public class DaySeven
         var hands = input.Select(x => new Hand(x.Split(" ")[0], int.Parse(x.Split(" ")[1]))).ToList();
         hands.Sort((x, y) => x.CompareTo(y));
         
-        // hands.ForEach(x => Console.WriteLine($"{x.Card} {x.TypeOfHand}"));
+        hands.ForEach(x => Console.WriteLine($"{x.Card} {x.TypeOfHand}"));
         
         long result = 0;
         for (int i = 0; i < hands.Count; i++)
@@ -52,27 +52,17 @@ public class DaySeven
 
     private long BodyPartTwo(string[] input)
     {
-        var result = 1;
-        var races = input[0].Split(":")[1].Split(" ").Select(x => x.Trim())
-            .Where(x => !string.IsNullOrWhiteSpace(x))
-            .Zip(input[1].Split(":")[1].Split(" ").Select(x => x.Trim())
-                    .Where(x => !string.IsNullOrWhiteSpace(x))
-                , (x, y) => new { Time = long.Parse(x), Distance = long.Parse(y) })
-            .ToList();
-
-        foreach (var race in races)
+        var hands = input.Select(x => new Hand(x.Split(" ")[0], int.Parse(x.Split(" ")[1]), true)).ToList();
+        hands.Sort((x, y) => x.CompareTo(y));
+        
+        // hands.ForEach(x => Console.WriteLine($"{x.Card} {x.TypeOfHand}"));
+        
+        long result = 0;
+        for (int i = 0; i < hands.Count; i++)
         {
-            var counter = 0;
-            for (var i = 1; i < race.Time; i++)
-            {
-                var currentDistance = (race.Time - i) * i;
-                if (currentDistance > race.Distance)
-                    counter++;
-            }
-
-            if (counter > 0)
-                result *= counter;
+            result += (i+1) * hands[i].Bid;
         }
+        
         return result;
     }
 
@@ -88,7 +78,7 @@ public class Hand
     
     private Dictionary<string, int> _cardsDictionary = new();
 
-    public Hand(string card, int bid)
+    public Hand(string card, int bid, bool isSecond = false)
     {
         Card = card;
         Bid = bid;
@@ -100,45 +90,74 @@ public class Hand
                 _cardsDictionary.Add(x, 1);
         }
 
-        // if (_cardsDictionary.ContainsKey("J"))
-        // {
-        //     if(TypeOfHand == TypeOfHands.HighCard)
-        //         Card = Card.Replace("J", "A");
-        //     else if (TypeOfHand == TypeOfHands.OnePair)
-        //     {
-        //         var toReplace = _cardsDictionary.First(x => x.Value == 2).Key;
-        //         Card = Card.Replace("J", toReplace);
-        //     }
-        //     else if (TypeOfHand == TypeOfHands.TwoPairs)
-        //     {
-        //         var toReplace = _cardsDictionary.Where(x => x.Value == 2)
-        //             .OrderByDescending(x => x.Key)
-        //             .First().Key;
-        //         Card = Card.Replace("J", toReplace);
-        //     }
-        //     else if (TypeOfHand == TypeOfHands.ThreeOfAKind)
-        //     {
-        //         var toReplace = _cardsDictionary.First(x => x.Value == 3).Key;
-        //         Card = Card.Replace("J", toReplace);
-        //     }
-        //     else if (TypeOfHand == TypeOfHands.FullHouse)
-        //     {
-        //         var toReplace = _cardsDictionary.First(x => x.Value == 3).Key;
-        //         Card = Card.Replace("J", toReplace);
-        //     }
-        //     else if (TypeOfHand == TypeOfHands.FourOfAKind)
-        //     {
-        //         Card = Card.Replace("J", _cardsDictionary.First(x => x.Value == 4).Key == "A" ? "K" : "A");
-        //     }
-        // }
-        //
-        // foreach (var x in CardsArray)
-        // {
-        //     if (_cardsDictionary.ContainsKey(x))
-        //         _cardsDictionary[x]++;
-        //     else
-        //         _cardsDictionary.Add(x, 1);
-        // }
+        if (!isSecond)
+            return;
+        
+        if (_cardsDictionary.ContainsKey("J"))
+        {
+            Console.WriteLine("ToReplace: " + Card);
+            if (TypeOfHand == TypeOfHands.HighCard)
+            {
+                var toReplace = _cardsDictionary.Select(x => x.Key).ToList();
+                toReplace.Sort((x, y) => MyStringCompare(x, y));
+                Card = Card.Replace("J", toReplace[4] == "J" ? toReplace[3] : toReplace[4]);
+            }
+            else if (TypeOfHand == TypeOfHands.OnePair)
+            {
+                var toReplace = _cardsDictionary.First(x => x.Value == 2).Key;
+                Card = Card.Replace("J", toReplace == "J" ? "A" : toReplace);
+            }
+            else if (TypeOfHand == TypeOfHands.TwoPairs)
+            {
+                var first = _cardsDictionary.Where(x => x.Value == 2).First();
+                var second = _cardsDictionary.Where(x => x.Value == 2).Last();
+                var result = MyStringCompare(first.Key, second.Key);
+                var toReplace = "";
+                if(first.Key == "J")
+                    toReplace = second.Key;
+                else if(second.Key == "J")
+                    toReplace = first.Key;
+                else if(result == 1)
+                    toReplace = first.Key;
+                else
+                    toReplace = second.Key;
+                
+                Card = Card.Replace("J", toReplace);
+            }
+            else if (TypeOfHand == TypeOfHands.ThreeOfAKind)
+            {
+                var toReplace = _cardsDictionary.First(x => x.Value == 3).Key;
+                var toReplace2 = _cardsDictionary.Where(x => x.Value == 1).Select(x => x.Key).ToList();
+                if(toReplace == "J")
+                    toReplace = MyStringCompare(toReplace2[0], toReplace2[1]) == 1 ? toReplace2[0] : toReplace2[1];
+                Card = Card.Replace("J", toReplace == "J" ? "A" : toReplace);
+            }
+            else if (TypeOfHand == TypeOfHands.FullHouse)
+            {
+                var toReplace = _cardsDictionary.First(x => x.Value == 3).Key;
+                Card = Card.Replace("J", toReplace == "J" ? "A" : toReplace);
+            }
+            else if (TypeOfHand == TypeOfHands.FourOfAKind)
+            {
+                var toReplace = _cardsDictionary.First(x => x.Value == 4).Key;
+                Card = Card.Replace("J", toReplace == "J" ? "A" : toReplace);
+            }
+            else if (TypeOfHand == TypeOfHands.FiveOfAKind)
+            {
+                Card = Card.Replace("J", "A");
+            }
+            
+            Console.WriteLine("Replaced: " + Card);
+        }
+        
+        _cardsDictionary = new();
+        foreach (var x in CardsArray)
+        {
+            if (_cardsDictionary.ContainsKey(x))
+                _cardsDictionary[x]++;
+            else
+                _cardsDictionary.Add(x, 1);
+        }
     }
     
     public TypeOfHands TypeOfHand => GetTypeOfHand();

@@ -49,5 +49,7 @@ Console.WriteLine($"Result of day six for long input part 2: {sixthDay.ResolvePa
 var seventhDay = new DaySeven();
 Console.WriteLine($"Result of day seven for small input: {seventhDay.ResolvePartOneSmallInput()}");
 Console.WriteLine($"Result of day seven for long input: {seventhDay.ResolvePartOneLongInput()}");
-
+Console.WriteLine($"Result of day seven for small input part 2: {seventhDay.ResolvePartTwoSmallInput()}");
+// Still to be resolved
+Console.WriteLine($"Result of day seven for long input part 2: {seventhDay.ResolvePartTwoLongInput()}");
 
