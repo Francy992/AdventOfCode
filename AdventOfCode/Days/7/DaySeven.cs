@@ -39,7 +39,7 @@ public class DaySeven
         var hands = input.Select(x => new Hand(x.Split(" ")[0], int.Parse(x.Split(" ")[1]))).ToList();
         hands.Sort((x, y) => x.CompareTo(y));
         
-        hands.ForEach(x => Console.WriteLine($"{x.Card} {x.TypeOfHand}"));
+        // hands.ForEach(x => Console.WriteLine($"{x.Card} {x.TypeOfHand}"));
         
         long result = 0;
         for (int i = 0; i < hands.Count; i++)
@@ -95,7 +95,7 @@ public class Hand
         
         if (_cardsDictionary.ContainsKey("J"))
         {
-            Console.WriteLine("ToReplace: " + Card);
+            // Console.WriteLine("ToReplace: " + Card);
             if (TypeOfHand == TypeOfHands.HighCard)
             {
                 var toReplace = _cardsDictionary.Select(x => x.Key).ToList();
@@ -147,7 +147,7 @@ public class Hand
                 Card = Card.Replace("J", "A");
             }
             
-            Console.WriteLine("Replaced: " + Card);
+            // Console.WriteLine("Replaced: " + Card);
         }
         
         _cardsDictionary = new();
