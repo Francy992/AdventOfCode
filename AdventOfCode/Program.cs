@@ -1,6 +1,7 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
 using AdventOfCode.Days._1;
+using AdventOfCode.Days._10;
 using AdventOfCode.Days._2;
 using AdventOfCode.Days._3;
 using AdventOfCode.Days._4;
@@ -67,3 +68,7 @@ Console.WriteLine($"Result of day nine for small input: {ninthDay.ResolvePartOne
 Console.WriteLine($"Result of day nine for long input: {ninthDay.ResolvePartOneLongInput()}");
 Console.WriteLine($"Result of day nine for small input part 2: {ninthDay.ResolvePartTwoSmallInput()}");
 Console.WriteLine($"Result of day nine for long input part 2: {ninthDay.ResolvePartTwoLongInput()}");
+
+var tenthDay = new DayTen();
+Console.WriteLine($"Result of day ten for small input: {tenthDay.ResolvePartOneSmallInput()}");
+Console.WriteLine($"Result of day ten for long input: {tenthDay.ResolvePartOneLongInput()}");
